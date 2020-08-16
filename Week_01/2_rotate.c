@@ -5,12 +5,12 @@
  * 一个位置移动。如果把数组的元素连成一个环的话，它们各自的相对顺序是没有变化的。所以只需计算出第一个
  * 元素移动k个位置后的新位置，然后从原数组分两次拷贝到新数组即可。
  * 
- * 时间复杂度：O(n)(拷贝操作)
+ * 时间复杂度：O(n)
  * 空间复杂度：O(n)
  */
 void rotate(int* nums, int numsSize, int k) {
     // 合法性及特殊值检查
-    if (nums == NULL || numsSize <= 1 || k <= 0 || k == numsSize) return;
+    if (nums == NULL || numsSize <= 1 || k <= 0 || (k % numsSize) == 0x00) return;
 
     // 开辟与原数组对等的新数组，初始取原素组的第一个元素
     int *newNums = malloc(numsSize * sizeof(int));
@@ -33,21 +33,74 @@ void rotate(int* nums, int numsSize, int k) {
  * 思路：
  *     数组每向右移动一步，即移动前的最后一个元素处于第一个位置，其余依次向后一个位置移动，依次循环k次进行处理。
  * 
+ * 时间复杂度：O(n*k)
+ * 空间复杂度：O(1)
+ */
+void rotate(int* nums, int numsSize, int k) {
+    // 合法性及特殊值检查
+    if (nums == NULL || numsSize <= 1 || k <= 0) return;
+
+    int tmp;
+    // 循环k次移动
+    for (int i = 0x00; i < k; i++) {
+        tmp = nums[numsSize - 1];           // 先空出最后一个元素
+        // 从倒数第2个元素开始群移之前所有的元素
+        memmove(nums + 1, nums, (numsSize - 1) * sizeof(int));
+        nums[0] = tmp;
+    }
+    return;
+}
+
+/* 第三种解法：原地暴力k次移动优化版
+ * 思路：
+ *     在第二种解法的基础上对移动的次数进行优化，当移动的k次大于等于数组的长度时，即每移动nunsSize次数组的元素又回到了原始的位置，
+ * 所以可以省去这些numsSize的倍数次的移动，最终移动k对numsSize的余数次即可
+ * 
+ * 时间复杂度：O(n^2)
+ * 空间复杂度：O(1)
+ */
+void rotate(int* nums, int numsSize, int k) {
+    // 合法性及特殊值检查
+    if (nums == NULL || numsSize <= 1 || k <= 0 || (k % numsSize) == 0) return;
+
+    int tmp;
+    // 循环k对numsSize的余数次移动
+    k %= numsSize;
+    for (int i = 0; i < k; i++) {
+        tmp = nums[numsSize - 1];           // 先空出最后一个元素
+        // 从倒数第2个元素开始群移之前所有的元素
+        memmove(nums + 1, nums, (numsSize - 1) * sizeof(int));
+        nums[0] = tmp;
+    }
+    return;
+}
+
+/* 第四种解法：反转
+ * 思路：
+ *     原数组：  1 2 3 4 | 5 6
+ *     整体反转: 6 5 | 4 3 2 1
+ *     局部反转: 5 6 | 1 2 3 4
+ * 
  * 时间复杂度：O(n)
  * 空间复杂度：O(1)
- * 与第一种解法相比：省去了新数组的空间开辟，省去了新老数组之间的数据拷贝操作
  */
-int removeDuplicates(int* nums, int numsSize) {
-    // 数组指针为空，数组长度小于2即返回
-    if (nums == NULL || numsSize <= 0) return 0;
-    if (numsSize == 1) return 1;
-
-    // 原数组从索引1开始遍历，新数组从索引0开始，假如当前值与新数组的不相等则拷贝否则不拷贝
-    int i_old = 0x01, i_new = 0x00;
-    for (; i_old < numsSize; i_old++) {
-        if (nums[i_old] != nums[i_new]) {
-            nums[++i_new] = nums[i_old];
-        }
+void num_reverse(int *start, int *end) {
+    while (start < end) {
+        int tmp = *end;
+        *end = *start;
+        *start = tmp;
+        start++;
+        end--;
     }
-    return i_new + 1;
+}
+void rotate(int* nums, int numsSize, int k) {
+    // 合法性及特殊值检查
+    if (nums == NULL || numsSize <= 1 || k <= 0 || (k % numsSize) == 0) return;
+
+    k %= numsSize;
+    num_reverse(nums, nums + numsSize - 1);
+    num_reverse(nums, nums + k - 1);
+    num_reverse(nums + k, nums + numsSize - 1);
+
+    return;
 }
