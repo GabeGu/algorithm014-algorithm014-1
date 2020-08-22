@@ -10,8 +10,6 @@ public class IsAnagram {
      *  时间复杂度：O(nlongn)(主要以排序的时间复杂度为主) 
      *  空间复杂度：O(n)(这里的实现需要额外的空间来存放用于排序的字符串转换而来的字符数组)
      */
-    /** 
-     */
     public boolean solution1(String s, String t) {
         if (s.length() != t.length()) return false;
 
@@ -26,6 +24,7 @@ public class IsAnagram {
     /**
      * 解法2：字符抵消
      * 思路：题目假设只包含小写字母，那么可以建立一张与字母对应的计数表，当某个字母在s词中出现时则在对应的表中记+1，在t词中则记-1
+     *      如果最终所有的字母计数均为零则说明是字母异位词，否则不是
      * 
      *  时间复杂度：O(n)
      *  空间复杂度：O(1)
