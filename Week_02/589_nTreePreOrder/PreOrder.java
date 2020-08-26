@@ -7,10 +7,8 @@ public class PreOrder {
         if (root == null) return res;
 
         res.add(root.val);                  // 先添加根节点
-        if (root.children != null) {
-            for (Node child: root.children) {   // 再添加子节点
-                res.addAll(preOrder(child));
-            }
+        for (Node child: root.children) {   // 再添加子节点
+            res.addAll(preOrder(child));
         }
         return res;
     }
