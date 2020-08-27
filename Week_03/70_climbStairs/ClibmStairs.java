@@ -21,4 +21,26 @@ public class ClibmStairs {
 
         return solution1(n - 1) + solution1(n - 2);
     }
+
+    /**
+     * 解法2：缓存法
+     * 思路：解法1的递归操作由于有大量的重复计算导致时间复杂度为指数级别，根据斐波那契序列的特性，后续序列的值是基于前2个序列值之和
+     *      递推得到，那么求第n个序列的值就可以从第1和第2个序列做为最近的2个值a和b开始，逐步计算下一个序列的值，每求得一个新的序列
+     *      值就将a和b同步更新，依次类推知道求的第n个序列的值。
+     *      
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     */
+    public static int solution2(int n) {
+        if (n <= 2) return n;
+
+        int a = 1, b = 2;               // 序列起点
+        int res = 0;                    // 最新序列值
+        for (int i = 3; i <= n; i++) {
+            res = a + b;
+            a = b;                      // 更新最近2个序列值
+            b = res;
+        }
+        return res;
+    }
 }
