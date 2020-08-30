@@ -40,13 +40,14 @@ public class GenerateParenthesis {
     }
 
     public List<String> solution(int n) {
+        if (n == 0) return result;
         int left = n, right = n;                    // 初始左右括号剩余个数
 
         generateParenthesis(left, right);
         return result;
     }
 
-    void generateParenthesis(int left, int right) {
+    private void generateParenthesis(int left, int right) {
         if (left == 0 && right == 0) {              // 左右括号均已用完，添加一种有效组合
             result.add(str);
             return;
@@ -56,14 +57,14 @@ public class GenerateParenthesis {
         if (left != 0) {                            
             str = str + '(';
             generateParenthesis(left - 1, right);   // 交由下一层
-            str.substring(0, str.length() - 1);     // 本层左括号分支已处理完，删除
+            str = str.substring(0, str.length() - 1);     // 本层左括号分支已处理完，删除
         }
 
         // 右括号没有用完且此时右括号剩余多余左括号(即已添加的左括号数量多余右括号数量)
         if (right != 0 && right > left) {           
             str = str + ')';
             generateParenthesis(left, right - 1);
-            str.substring(0, str.length() - 1);     // 本层右括号分支已处理完，删除
+            str = str.substring(0, str.length() - 1);     // 本层右括号分支已处理完，删除
         }
         return;
     }
