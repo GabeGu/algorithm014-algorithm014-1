@@ -3,5 +3,4 @@ public class HammingWeightMain {
         int x = 0x7FFFFFFF;
         System.out.println(HammingWeight.solution2(x));
     }    
-    
 }
